@@ -43,17 +43,28 @@ public class UserController {
         return "redirect:/users";
     }
 
-    @RequestMapping (value = "/del", method = RequestMethod.GET)
-    public String removeUser(@RequestParam("id") Integer id){
+    @RequestMapping(value = "/del", method = RequestMethod.GET)
+    public String removeUser(@RequestParam("id") Integer id) {
         userRepository.removeUser(id);
         return "redirect:/users";
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
-        public String editUser(@RequestParam("id") Integer id, Model model){
-            model.addAttribute("user", userRepository.getUserById(id));
-
-            return "editUser";
-        }
+    public String editUser(@RequestParam("id") Integer id, Model model) {
+        model.addAttribute("user", userRepository.getUserById(id));
+        return "editUser";
     }
+
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    public String editUser(@RequestParam("name") String name, @RequestParam("isadmin") Boolean isAdmin,
+                           @RequestParam("age") Integer age, @RequestParam("id") Integer id) {
+        User user = userRepository.getUserById(id);
+        user.setAdmin(isAdmin);
+        user.setName(name);
+        user.setAge(age);
+        userRepository.editUser(user);
+        return "redirect:/users";
+
+    }
+
 }
